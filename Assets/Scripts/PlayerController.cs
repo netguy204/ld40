@@ -5,14 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
     public float JumpHeight = 10.0f;
 
-    private Rigidbody2D m_rigidBody;
+    private Rigidbody m_rigidBody;
     private GameObject m_world;
     private bool m_grounded = true;
     private float m_jumpImpulse = 0.0f;
 
 	// Use this for initialization
-	void Start () {     
-        m_rigidBody = GetComponent<Rigidbody2D>();
+	void Start () {
+        m_rigidBody = GetComponent<Rigidbody>();
         m_world = GameObject.Find("World");
         m_jumpImpulse = m_rigidBody.mass * Mathf.Sqrt(2.0f * Mathf.Abs(Physics.gravity.y) * JumpHeight / 3.0f);
 	}
@@ -38,10 +38,9 @@ public class PlayerController : MonoBehaviour {
         if (m_grounded && jumpPressed)
         {
             Vector2 jumpForce = m_jumpImpulse * ToMouse();
-            Debug.Log(jumpForce.ToString());
-            m_rigidBody.AddForce(jumpForce, ForceMode2D.Impulse);
+            m_rigidBody.AddForce(jumpForce, ForceMode.Impulse);
             m_grounded = false;
-            m_rigidBody.gravityScale = 1.0f;
+            m_rigidBody.useGravity = true;
         }
 	}
 
@@ -52,32 +51,36 @@ public class PlayerController : MonoBehaviour {
         Debug.DrawLine(transform.position, rayEnd, Color.red);
     }
 
-    void UpdateGrounded(Collider2D collider)
+    void UpdateGrounded(Collider collider)
     {
         GameObject go = collider.gameObject;
         while (go != null)
         {
             if (go == m_world)
             {
-                Debug.Log("triggered");
                 m_grounded = true;
                 m_rigidBody.velocity = Vector2.zero;
-                m_rigidBody.gravityScale = 0.0f;
+                m_rigidBody.useGravity = false;
                 return;
             }
-
+            
             go = go.transform.parent.gameObject;
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionStay(Collision collision)
     {
         UpdateGrounded(collision.collider);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("on collision");
         UpdateGrounded(collision.collider);
+    }
+
+    public void OnGoop(Goop goop)
+    {
+        Destroy(goop.gameObject);
+        transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
     }
 }

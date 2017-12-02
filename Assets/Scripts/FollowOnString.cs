@@ -6,11 +6,8 @@ public class FollowOnString : MonoBehaviour {
     public GameObject Target; // what we follow
     public float StringLength = 1.0f;
 
-    private float m_z;
-
 	// Use this for initialization
 	void Start () {
-        m_z = transform.position.z;
 	}
 	
 	// Update is called once per frame
