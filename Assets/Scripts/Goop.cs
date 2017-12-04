@@ -25,6 +25,10 @@ public class Goop : MonoBehaviour {
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             player.OnGoop(this);
+        } else if (collision.gameObject.tag == "PlayerChild")
+        {
+            ChildCollisionNotifyParent np = collision.gameObject.GetComponent<ChildCollisionNotifyParent>();
+            np.OnGoop(this);
         }
     }
 }

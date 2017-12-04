@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class FollowOnString : MonoBehaviour {
     public GameObject Target; // what we follow
     public float StringLength = 1.0f;

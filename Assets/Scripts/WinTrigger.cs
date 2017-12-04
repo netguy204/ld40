@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class EndOfTheWorld : MonoBehaviour {
+public class WinTrigger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -12,17 +11,15 @@ public class EndOfTheWorld : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+		
 	}
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            player.OnWinTriggered(this);
         }
     }
 }

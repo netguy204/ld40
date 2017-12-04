@@ -11,3 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/meshLevelPrototype.unity
     guid: 44fdbb2ea5c622f4e8788b211279db63
+  - enabled: 0
+    path: Assets/Scenes/spongeTest.unity
+    guid: 853efb435fecc8c46af43808f0549454
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 91d8feb67c9e53740bc3108155d5a655

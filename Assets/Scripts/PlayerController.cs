@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     public float JumpHeight = 10.0f;
@@ -9,13 +10,15 @@ public class PlayerController : MonoBehaviour {
     private GameObject m_world;
     private bool m_grounded = true;
     private float m_jumpImpulse = 0.0f;
+    private LineRenderer m_lineRenderer;
 
 	// Use this for initialization
 	void Start () {
         m_rigidBody = GetComponent<Rigidbody>();
         m_world = GameObject.Find("World");
         m_jumpImpulse = m_rigidBody.mass * Mathf.Sqrt(2.0f * Mathf.Abs(Physics.gravity.y) * JumpHeight / 3.0f);
-	}
+        m_lineRenderer = GetComponent<LineRenderer>();
+    }
 	
     Vector3 MouseInWorld()
     {
@@ -49,6 +52,8 @@ public class PlayerController : MonoBehaviour {
     {
         Vector2 rayEnd = (Vector2)transform.position + 3.0f * ToMouse();
         Debug.DrawLine(transform.position, rayEnd, Color.red);
+        m_lineRenderer.SetPosition(0, transform.position);
+        m_lineRenderer.SetPosition(1, MouseInWorld());
     }
 
     void UpdateGrounded(Collider collider)
@@ -68,6 +73,11 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void NotifyChildCollision(Collision collision)
+    {
+        UpdateGrounded(collision.collider);
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         UpdateGrounded(collision.collider);
@@ -82,5 +92,12 @@ public class PlayerController : MonoBehaviour {
     {
         Destroy(goop.gameObject);
         transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
+    }
+
+    public void OnWinTriggered(WinTrigger win)
+    {
+        Debug.Log("win triggered");
+        Destroy(win.gameObject);
+        SceneManager.LoadScene(2);
     }
 }
